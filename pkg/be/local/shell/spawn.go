@@ -35,6 +35,11 @@ func Spawn(ctx context.Context, c llir.ShellComponent, q llir.Queue, runname, lo
 	outfile := filepath.Join(logdir, logfile+".out")
 	errfile := filepath.Join(logdir, logfile+".err")
 
+	info := "Run:" + runname
+	if !strings.Contains(runname, c.InstanceName) {
+		info = info + " " + "Instance:" + c.InstanceName
+	}
+	command = "echo " + info + "; " + command
 	fmt.Fprintf(os.Stderr, "Launching process with commandline: %s\n", command)
 	cmd := exec.CommandContext(ctx, "/bin/sh", "-c", command)
 	cmd.Dir = workdir
